@@ -195,6 +195,33 @@ $(document).on('click', '#exchange_otp_verify', function(e) {
      return false;
 });
 
+//Item
+$('.item_live_list .item').click(function(){
+    $('.item_live_list .item').removeClass('selected_item');
+    $(this).addClass('selected_item');
+
+});
+
+$('#watch_live_tab').click(function(){
+    getLiveItem();
+
+    return false;
+});
+
+$('#send_item').click(function(){
+    quantity = $('#send_item_quantity').val();
+
+    //TEMP
+    to_uid = 10;
+
+    item_id = $('.item_live_list .selected_item').attr('item-id');
+    item_name = $('.item_live_list .selected_item').attr('item-name');
+
+    itemTransfer(to_uid, item_id, item_name, quantity);
+
+    return false;
+});
+
 //-------------------------
 //Function
 
@@ -391,7 +418,7 @@ function showAlert(text)
     htmlcode = "";
     htmlcode += "<div class='popup'>";
     htmlcode += "<p style='display:block; padding:10px 50px; font-size:14px;'>"+text+"</p>";
-    htmlcode += "<button style='text-align:right; float: right; color: white; background-color: #3b5998; border: 1px solid #1D315A; cursor: pointer; padding: 5px 20px;' class='remove'>Close</button>";
+    htmlcode += "<button style='text-align:right; float: right; color: white; background-color: #3b5998; border: 1px solid #1D315A; cursor: pointer; padding: 5px 20px;' class='remove'>ปิด</button>";
     htmlcode += "<div>";
 
     $('body').prepend(htmlcode);
@@ -401,6 +428,101 @@ function showAlert(text)
     });
 }
 
+function showConfirmation(text)
+{
+    htmlcode = "";
+    htmlcode += "<div class='popup'>";
+    htmlcode += "<p style='display:block; padding:10px 50px; font-size:14px;'>"+text+"</p>";
+    htmlcode += "<button style='text-align:right; float: right; color: white; background-color: #3b5998; border: 1px solid #1D315A; cursor: pointer; padding: 5px 20px;' class='remove'>ยกเลิก</button>";
+    htmlcode += "<button style='text-align:right; float: right; color: white; background-color: #3b5998; border: 1px solid #1D315A; cursor: pointer; padding: 5px 20px;' class='confirm remove'>ตกลง</button>";
+    htmlcode += "<div>";
+
+    $('body').prepend(htmlcode);
+
+    $('.remove').click(function(){
+        $(this).parent().remove();
+    });
+}
+
+
+//Item
+function getLiveItem(live_user_id)
+{
+    //alert('getOnlineUser');
+    $.ajax({
+        type: "POST",
+        dataType: 'json',
+        url: "http://www.vdomax.com/payment/api/center.php?action=getliveitem",
+
+        success : function(json){
+            console.log(json);
+
+            htmlcode = "";
+            $.each(json, function(index,row){
+                htmlcode = "";
+
+                imgpath = row['imgpath'];
+                quantity = row['name']+"|จำนวนที่มี "+row['own_quantity']+" ชิ้น";
+
+                htmlcode += "<li class='item'>";
+                htmlcode += 
+                htmlcode += "</li>";
+               
+                htmlcode += '<img alt="'+quantity+'" item-name="'+row['name']+'" item-id="'+row['id']+'" src="'+imgpath+'"/>';
+            });
+
+            $(".item_live_list").html(htmlcode);
+
+        }
+    });
+}
+
+function itemTransfer(to_uid,item_id,item_name,quantity)
+{
+    $.ajax({
+        type: "POST",
+        dataType: 'json',
+        url: "http://www.vdomax.com/payment/api/center.php?action=useitem",
+        data: {
+            "to_uid": to_uid,
+            "item_id": item_id,
+            "quantity": quantity
+        },
+        success : function(json){
+            console.log(json);
+
+            if(json['status']==2)
+            {
+                //ไอเทมไม่พอ / ไม่มี จะเด้งว่าต้องการจะซื้อเป็นจำนวนเท่านี้เลยหรือไม่
+                text = "ไอเทมที่คุณมีไม่เพียงพอต่อการส่ง คุณต้องการซื้อ "+item_name+" เป็นจำนวน "+quantity+" ชิ้น หรือไม่?";
+                showConfirmation(text);
+
+                $('.confirm').click(function(){
+                    buyItem(item_id, quantity);
+                });
+
+            }
+
+        }
+    });
+}
+
+function buyItem(item_id, quantity)
+{
+    $.ajax({
+        type: "POST",
+        dataType: 'json',
+        url: "http://www.vdomax.com/payment/api/center.php?action=buyitem",
+        data: {
+            "item_id": item_id,
+            "quantity": quantity
+        },
+        success : function(json){
+            console.log(json);
+
+        }
+    });
+}
 
 //End document.ready
 });

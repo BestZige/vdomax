@@ -93,6 +93,14 @@ switch($action)
 	case "getitem":
 		echo getOwnItem($user_id);
 	break;
+
+	case "getliveitem" :
+		$live_user_id = $_POST['live_user_id'];
+
+		$watch_user_id = $user_id;
+		
+		echo getLiveItem($live_user_id,$watch_user_id);
+	break;
 	default:
 	break;
 }
@@ -406,6 +414,62 @@ function getOwnItem($user_id)
 	return json_encode($res);
 }
 
+function getLiveItem($live_user_id, $watch_user_id)
+{
+	//DB Connection
+	$db2 = new mysqli('localhost', 'payment', 'payment7410', 'payment');
+	$return_data = array();
+
+	$sql = "SELECT i.id, i.name, i.imgpath, i.price, 
+		CASE WHEN io.quantity is NULL
+		THEN 0
+		ELSE io.quantity 
+		END
+		AS own_quantity
+		FROM item_live il
+		INNER JOIN item i
+			ON il.item_id = i.id
+		LEFT JOIN item_own io
+			ON io.item_id = il.item_id AND io.user_id = $watch_user_id
+		WHERE il.user_id = $live_user_id
+		AND approve = 1
+		";
+
+	$res = $db2->query($sql);
+
+	$res = fetchAll($res);
+
+	return json_encode($res);
+}
+
+function getQuantityOfItem($user_id, $item_id)
+{
+	//DB Connection
+	$db2 = new mysqli('localhost', 'payment', 'payment7410', 'payment');
+
+	$sql = "SELECT io.quantity
+		FROM item_own io
+		WHERE item_id = $item_id AND user_id = $user_id
+		";
+
+	$res = $db2->query($sql)
+
+	if($res->num_rows<=0)
+	{
+		return 0;
+	}
+	else
+	{
+		$res = $db2->fetch_array(MYSQLI_ASSOC);
+		return $res['quantity'];
+	}
+}
+
+function initLiveItem($user_id)
+{
+
+}
+
 // Item Transfer
 function itemtransfer($from_uid,$token, $to_uid, $item_id, $quantity)
 {
@@ -437,7 +501,7 @@ function itemtransfer($from_uid,$token, $to_uid, $item_id, $quantity)
 		if($res->num_rows<=0)
 		{
 			//Don't have this Item [Item_ID]
-			$return_data['status'] = 0;
+			$return_data['status'] = 2;
 			$return_data['message'] = "คุณมีไอเทมไม่พอในการส่ง";
 		}
 		else
@@ -448,7 +512,7 @@ function itemtransfer($from_uid,$token, $to_uid, $item_id, $quantity)
 			if($current_quantity - $quantity < 0)
 			{
 				//จำนวน item ไม่เพียงพอสำหรับการส่ง
-				$return_data['status'] = 0;
+				$return_data['status'] = 2;
 				$return_data['message'] = "คุณมีไอเทมไม่พอในการส่ง";
 			}
 			else

@@ -8,6 +8,7 @@
 <script type="text/javascript" src="{$SITE_URL}/js/core.tricker.js"></script>
 <link rel="stylesheet" type="text/css" href="{$SITE_URL}/payment/css/style.css" />
 <script type="text/javascript" src="script/payment.js"></script>
+
 <!-- <script type="text/javascript" src="script/bootstrap.min.js"></script> -->
 
 <!-- Commom [apps] JS -->
@@ -53,7 +54,7 @@
                 <div class="clear-shadow"></div>
                 
                 <div class="content">
-                    <div class="content-1">
+                    <div class="sub content-1">
                         <h2>MaxPoint คงเหลือ : <span class="maxpoint_balance">0</span> MP</h2>         
                         
                         <h3>Promotion</h3>
@@ -71,32 +72,88 @@
                             <img src="images/1-flower.png"/>
                         </p>
                     </div>
-                    <div class="content-2">
+                    <div class="sub content-2">
                        <h2>MaxPoint คงเหลือ : <span class="maxpoint_balance">0</span> MP</h2>
                        <h3>ช่องทางการเติม MaxPoint</h3>
                         <p class="select"> 
                             <img class="channel truemoney" src="images/truemoney.jpg" />
+                            <img class="channel paypal" src="images/paypal.jpg" />
+                            <!--
                             <img class="channel paysbuy" src="images/paysbuy.png" />
                             <img class="channel kbank" src="images/kbank.jpg" />  
-                            <img class="channel paypal" src="images/paypal.jpg" />                           
+                            -->
+                                                       
                         </p>
-
+                        <div id="pay-channel-1" class="payform">
                         <h3>TRUEMONEY</h3>
-                            <p style="float:left;width:400px;padding:35px;">
+                            <div style="float:left;width:400px;padding:35px;">
                                 <span><input type="text" id="true_pass_tmp" name="true_pass_tmp"></span>
                                 <a href="#" class="btn" id="truemoney_fill" >เติมเงิน</a>
                                 <input type="hidden" name="channel_id" value="1">
-                            </p>
-                            <p style="float:left;width:200px">
+                            </div>
+                            <!--
+                            <div style="float:left;width:200px">
                                 100 THB = 1000 MP<br/>
                                 200 THB = 2000 MP<br/>
                                 500 THB = 5000 MP<br/>
                                 1000 THB = 10000 MP<br/>
-                            </p>
+                            </div>
+                            -->
+                            </div>
+                            <div id="pay-channel-2" class="payform">
+                        <h3>PAYPAL</h3>
+                         <div>
+               
+                            <script src="script/paypal-button.min.js?merchant=SDJSNF2VY4B34" 
+    data-button="Topup" 
+    data-name="VDOMax: MaxPoint 1000 MP" 
+    data-quantity="1" 
+    data-amount="100" 
+    data-currency="THB" 
+    data-shipping="0" 
+    data-tax="0" 
+    data-callback="http://www.vdomax.com/payment/api/paypal.php"
+></script>
+<script src="script/paypal-button.min.js?merchant=SDJSNF2VY4B34" 
+    data-button="Topup" 
+    data-name="VDOMax: MaxPoint 2000 MP" 
+    data-quantity="1" 
+    data-amount="200" 
+    data-currency="THB" 
+    data-shipping="0" 
+    data-tax="0" 
+    data-callback="http://www.vdomax.com/payment/api/paypal.php"
+></script>
+<script src="script/paypal-button.min.js?merchant=SDJSNF2VY4B34" 
+    data-button="Topup" 
+    data-name="VDOMax: MaxPoint 5000 MP" 
+    data-quantity="1" 
+    data-amount="500" 
+    data-currency="THB" 
+    data-shipping="0" 
+    data-tax="0" 
+    data-callback="http://www.vdomax.com/payment/api/paypal.php"
+></script>
+<script src="script/paypal-button.min.js?merchant=SDJSNF2VY4B34" 
+    data-button="Topup" 
+    data-name="VDOMax: MaxPoint 100000 MP" 
+    data-quantity="1" 
+    data-amount="1000" 
+    data-currency="THB" 
+    data-shipping="0" 
+    data-tax="0" 
+    data-callback="http://www.vdomax.com/payment/api/paypal.php"
+></script>
+</div>
+                            </div>
+
+
+                            
+
 
                         
                     </div>
-                    <div class="content-3" id="transfer_friends">
+                    <div class="sub content-3" id="transfer_friends">
                     <h2>MaxPoint คงเหลือ : <span class="maxpoint_balance">0</span> MP</h2>         
                         <h3>โอนให้เพื่อน (เลือกเพื่อนที่ต้องการจะโอน)</h3>
                         <p class="fbox">
@@ -111,7 +168,7 @@
                         </p>
                         
                     </div>
-                    <div class="content-4">
+                    <div class="sub content-4">
                         <h2>MaxPoint คงเหลือ : <span class="maxpoint_balance">0</span> MP</h2>         
                         <h3>ประวัติการเติมเงิน</h3>
                         <table class="my_account_fill">
@@ -145,7 +202,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="content-5">
+                    <div class="sub content-5">
                         <h2>MaxPoint คงเหลือ : <span class="maxpoint_balance">0</span> MP</h2> 
                         {if $is_acc_verify}
                             <h3>แลกเปลี่ยน Max Point เป็นเงินบาท</h3>

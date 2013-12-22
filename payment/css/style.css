@@ -376,3 +376,39 @@ div.popup
     height: 100%;
     z-index: 90; /* makes the div the second most top layer, so it’ll lay on top of everything else EXCEPT for divs with a higher z-index (meaning the #overlay ruleset) */
 }
+
+.item_live_div
+{
+	position:relative;
+}
+
+.item_live_list
+{
+	position:absolute;
+}
+
+.item_live_list li
+{
+	float:left;
+	padding:2px;
+	background:white;
+	margin:0px;
+	line-height: 28px;
+	height: 28px;
+}
+
+.item_live_list li.item
+{
+	border:1px solid gainsboro;
+}
+
+.item_live_list img
+{
+	width:28px;
+	height: 28px;
+}
+
+.item_live_list li.selected_item
+{
+	background-color:#3b5998;
+}
