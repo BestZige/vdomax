@@ -40,7 +40,7 @@ $(document).on('click', '#transfer_friends p img', function(e) {
 $('#maxpoint_transfer_button').click(function(){
     amount_maxpoint = $("input#maxpoint_to_transfer").val(); 
     to_uid = $('#transfer_friends p.fbox img.friend_selected').attr('user-id');
-alert(to_uid);
+console.log("USER_ID: "+ to_uid);
      $.ajax({
         type: "POST",
         dataType: 'json',
@@ -51,7 +51,7 @@ alert(to_uid);
         },
         success : function(data){
             console.log(data);
-            alert(data['message']);
+            showAlert(data['message']);
             reloadBalance();
         }
         });
@@ -96,7 +96,7 @@ $('#send_to_verify').click(function(){
             }
             else
             {
-                alert(data['message']);
+                showAlert(data['message']);
             }
         }
         });
@@ -164,7 +164,7 @@ $('#exchange').click(function(){
             }
             else
             {
-                alert(data['message']);
+                showAlert(data['message']);
             }
         }
         });
@@ -262,7 +262,7 @@ function fill_truemoney()
 
 function getTransactionHistory()
 {
-    alert('getTransactionHistory');
+    console.log('getTransactionHistory');
     $.ajax({
         type: "POST",
         dataType: 'json',
@@ -389,12 +389,16 @@ function getFollowing()
 function showAlert(text)
 {
     htmlcode = "";
-    htmlcode = "<div class='popup'>";
-    htmlcode = "<p style='display:block;'>"+text+"</p>";
-    htmlcode = "<button class='close'>Close</button>"
-    htmlcode = "<div>";
+    htmlcode += "<div class='popup'>";
+    htmlcode += "<p style='display:block; padding:10px 50px; font-size:14px;'>"+text+"</p>";
+    htmlcode += "<button style='text-align:right; float: right; color: white; background-color: #3b5998; border: 1px solid #1D315A; cursor: pointer; padding: 5px 20px;' class='remove'>Close</button>";
+    htmlcode += "<div>";
 
-    $('body').append(htmlcode);
+    $('body').prepend(htmlcode);
+
+    $('.remove').click(function(){
+        $(this).parent().remove();
+    });
 }
 
 

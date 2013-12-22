@@ -1,3 +1,6 @@
+a {
+
+}
 .tabs {
     position: relative;
 	margin: 40px auto;
@@ -110,7 +113,7 @@
     //border-radius: 0 3px 3px 3px;
 }
 
-.centerPanelContent .content div {
+.centerPanelContent .content .sub {
     position: absolute;
 	top: 0;
 	left: 0;
@@ -163,12 +166,17 @@ background: #eee;
 padding: 5px;
 }
 
+.paypal-button {
+	float: left;
+}
+
 .centerPanelContent .content table {
 	width: 100%
 }
 
 .centerPanelContent .content-3 > p img {
 	width: 90px;
+	margin:5px;
 }
 
 .centerPanelContent .content table img {
@@ -179,8 +187,13 @@ padding: 3px;
 .items img {
 	width: 90px;
 }
+
+.payform {
+	width:100px;
+	height:100px;
+}
 p.select img {
-	height: 50px;
+	height: 150px;
 }
 .truemoney {
 	background: #0dd000
