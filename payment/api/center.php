@@ -288,7 +288,7 @@ function pointtransfer($from_uid, $to_uid, $amount, $token)
 	if($to_uid=='' || $from_uid=='')
 	{
 		$return_data['status'] = 1;
-		$return_data['message'] = "Parameter ไม่ครบ";
+		$return_data['message'] = "กรุณาเลือกคนที่ต้องการโอน Max Point ไปให้";
 		return json_encode($return_data);
 	}
 	//Check Token (FROM UID)
@@ -813,6 +813,8 @@ function getPopularItem($market_uid=0)
 			GROUP BY i.id,i.name,i.desc,i.cat_id,i.price,i.imgpath,i.total
 			LIMIT 0,10
 			";
+
+			//print $sql;
 
 	$res = $db2->query($sql);
 
