@@ -1,0 +1,189 @@
+{
+Register
+http://api.vdomax.com/?action=register
+Parameter
+$_POST['firstname']="shuvit"
+$_POST['lastname']="funsok"
+$_POST['username']="kimkundad"
+$_POST['email']="verkidea@gmail.com"
+$_POST['confirm']="verkidea@gmail.com"
+$_POST['password']="golfgolf"
+$_POST['sex']="male"
+$_POST['month']="6"
+$_POST['day']="16"
+$_POST['year']="1987"
+}
+
+{"status":1,"msg":"Registration is complete."}
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+{
+login
+http://api.vdomax.com/?action=login
+Parameter
+$_POST['username_email']="verkidea@gmail.com"
+$_POST['password']="golfgolf"
+}
+
+{"status":1,"msg":"Login is successful.","tokenid":"25a50fea6d48cb15f4e37c53fe29ebd5"}
+
+{"status":1,"msg":"Login is successful.","tokenid":"00a821ae6631216ceb4b59e6595fd008"}
+
+{"status":1,"msg":"Login is successful.","tokenid":"0bf5b74d1cd9d149efb2e118858a40ba"}
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+{
+getprofileinfo
+http://api.vdomax.com/?action=getprofileinfo
+Parameter example
+$_POST[username] = "kimkundad";
+$_POST[tokenid] = "25a50fea6d48cb15f4e37c53fe29ebd5";
+}
+
+{"status":1,"data":{"username":"Kimkundad","firstname":"Shuvit","lastname":"Funsok","thumb":{"large":"content\/themes\/vdomax\/images\/misc\/no_avatar.png","small":"content\/themes\/vdomax\/images\/misc\/no_avatar_small.png","medium":"content\/themes\/vdomax\/images\/misc\/no_avatar_medium.png"},"sex":"F","birthday":"16\/7\/1987","country":"","website":"","status":"","live_url":"rtmp:\/\/203.151.162.7\/vdomax","steamer":"Kimkundad"},"wallphoto":null}
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+{
+gettimeline
+http://api.vdomax.com/?action=gettimeline
+Parameter example
+$_POST[tokenid] = "0bf5b74d1cd9d149efb2e118858a40ba";
+$_POST['app'] = "home";
+$_POST['get'] ="all";
+$_POST['filter'] = "All";
+$_POST['startPoint'] = 20;
+$_POST['sort'] = "Most Recent";
+$_POST['page'] = 1;
+}
+
+"System ok"
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+{
+getwatch
+http://api.vdomax.com/?action=getwatch
+Parameter example
+$_POST[tokenid] = "0bf5b74d1cd9d149efb2e118858a40ba";
+$_POST['app'] = "videos";
+$_POST['get'] ="all";
+$_POST['filter'] = "All";
+$_POST['startPoint'] = 20;
+$_POST['sort'] = "Most Recent";
+$_POST['page'] = 1;
+}
+
+"System ok"
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+{
+getvideoinfo
+http://api.vdomax.com/?action=getvideoinfo
+Parameter example
+$_POST['tokenid'] = "0bf5b74d1cd9d149efb2e118858a40ba";
+$_POST['video_id'] = "46";
+}
+
+"System ok"
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+{
+love
+http://api.vdomax.com/?action=love
+Parameter Example
+$_POST['tokenid'] = "0bf5b74d1cd9d149efb2e118858a40ba";
+$_POST['id'] = "344-4-303-18"; [ID]-[PostType]-[PostID]-[UserID] ดูพารามิเตอร์จาก Getwatch นะ
+$_POST['do'] = "unlike"; // [like,unlike,dislike,undislike,favorite,unfavorite]
+}
+
+{"status":1,"data":"success[2]"}
+
+{"ID":"344","UserID":"18","PostType":"4","PostID":"303","Time":"1386583683","Favorits":"0","Likes":"0","Dislikes":"0",
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+{
+postcomment
+http://api.vdomax.com/?action=postcomment
+Parameter Example
+$_POST['tokenid'] = "0bf5b74d1cd9d149efb2e118858a40ba";	
+$_POST['id'] = "344-4-303-18";
+$_POST['text'] = "Testing 'API'";
+$_POST['type'] = "comment"; [qcomment,comment,reply] ** ถ้า reply จะต้องส่ง [pid] ไปด้วย
+$_POST['pid'] = "22-4-70-1" [ID]-[PostType]-[PostID]-[UserID] ** เฉพาะ [reply]
+}
+
+{"status":1,"data":{"ID":32,"Time":1386585256,"Text":"Testing <a href=\"http:\/\/www.vdomax.com\/search.php?q=039;API\">&#039;API<\/a>"}}
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+{
+getonlineuser
+http://api.vdomax.com/?action=getonlineuser
+Parameter Example
+$_POST['tokenid'] = "0bf5b74d1cd9d149efb2e118858a40ba";
+}
+{"status":1,"data":{"onlines":[{"UserID":"1","UserFirstName":"Worachet","UserLastName":"Saengprab","UserAvatarPathSmall":"content\/uploads\/avatars\/s_8b14085a7a5792ffcf1ad19613ee34c2_small.jpg"}
+,{"UserID":"18","UserFirstName":"Youlove","UserLastName":"Youlove","UserAvatarPathSmall":"content\/uploads\/avatars\/s_b8e1bbf8bd9ee70ba917bfddf6efe1de_small.jpg"}],"getuser":3}}
+
+
+"System ok"
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+{
+sendmessage
+http://api.vdomax.com/?action=sendmessage
+Parameter Example
+$_POST['tokenid'] = "0bf5b74d1cd9d149efb2e118858a40ba";
+$_POST['to'] = "1"; userID ของคนที่ราต้องการส่ง
+$_POST['message'] = "Test ระบบ";
+}
+{"status":1,"data":{"status":"success","message":{"Time":1386586752,"Text":"Test \u0e23\u0e30\u0e1a\u0e1a"}}}
+
+"System ok"
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+{
+getmessage
+http://api.vdomax.com/?action=getmessage
+Parameter Example
+$_POST['tokenid'] = "0bf5b74d1cd9d149efb2e118858a40ba";
+$_POST['page'] = 0;
+$_POST['messagesize'] = 20;
+}
+
+"System ok"
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+{
+
+
+Parameter Example
+
+}
+
+{
+
+
+Parameter Example
+
+}
+
+{
+
+
+Parameter Example
+
+}

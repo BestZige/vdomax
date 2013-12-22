@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+        <title>MaxPoint Center</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta name="description" content="Animated Content Tabs with CSS3" />
+        <meta name="keywords" content="tabs, css3, transition, checked, pseudo-class, label, css-only, sibling combinator" />
+        <meta name="author" content="Codrops" />
+        <link rel="shortcut icon" href="../favicon.ico"> 
+        <link rel="stylesheet" type="text/css" href="css/demo.css" />
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+		<script type="text/javascript" src="js/modernizr.custom.04022.js"></script>
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300,300italic' rel='stylesheet' type='text/css'>
+		<!--[if lt IE 9]>
+			<style>
+				.content{
+					height: auto;
+					margin: 0;
+				}
+				.content div {
+					position: relative;
+				}
+			</style>
+		<![endif]-->
+    </head>
+    <body>
+        <div class="container">
+
+			<header>
+				<h1><span>MaxPoint</span> Center</h1>
+			</header>
+			<section class="tabs">
+	            <input id="tab-1" type="radio" name="radio-set" class="tab-selector-1" checked="checked" />
+		        <label for="tab-1" class="tab-label-1">หน้าแรก</label>
+		
+	            <input id="tab-2" type="radio" name="radio-set" class="tab-selector-2" />
+		        <label for="tab-2" class="tab-label-2">เติม</label>
+		
+	            <input id="tab-3" type="radio" name="radio-set" class="tab-selector-3" />
+		        <label for="tab-3" class="tab-label-3">โอน</label>
+			
+	            <input id="tab-4" type="radio" name="radio-set" class="tab-selector-4" />
+		        <label for="tab-4" class="tab-label-4">บัญชีฉัน</label>
+				
+				 <input id="tab-5" type="radio" name="radio-set" class="tab-selector-5" />
+		        <label for="tab-5" class="tab-label-5">รับเงิน</label>
+            
+			    <div class="clear-shadow"></div>
+				
+		        <div class="content">
+			        <div class="content-1">
+						<h2>MaxPoint คงเหลือ : <span>0</span> MP</h2>         
+						
+						<h3>Promotion</h3>
+						<p>
+							เติม MaxPoint ก่อน 31 ธ.ค. 56 แถมไอเท็มแจกสาวฟรี อัยย่ะ !<br/>
+						</p>
+						<h3>Item ยอดนิยม</h3>
+                        <p class="items">
+							<img src="images/1-flower.png"/>
+							<img src="images/1-flower.png"/>
+							<img src="images/3-flower.png"/>
+							<img src="images/3-flower.png"/>
+							<img src="images/1-flower.png"/>
+							<img src="images/3-flower.png"/>
+							<img src="images/1-flower.png"/>
+						
+						</p>
+				    </div>
+			        <div class="content-2">
+						<h2>MaxPoint คงเหลือ : <span>0</span> MP</h2>
+                       <h3>ช่องทางการเติม MaxPoint</h3>
+						<p>	
+							<img class="channel truemoney" src="images/truemoney.jpg" height="100" />
+							<img class="channel paysbuy" src="images/paysbuy.png" height="100" />
+							<img class="channel kbank" src="images/kbank.jpg" height="100" />							
+						</p>
+						<h3>TRUEMONEY</h3>
+						<p style="float:left;width:400px;padding:35px;">
+							<span><input type="text" id="true_pass_tmp" name="true_pass_tmp"></span>
+							<a href="#" class="btn" >เติมเงิน</a>
+						</p>
+						<p style="float:left;width:200px">
+							100 THB = 1000 MP<br/>
+							200 THB = 2000 MP<br/>
+							500 THB = 5000 MP<br/>
+							1000 THB = 10000 MP<br/>
+						</p>
+				    </div>
+			        <div class="content-3">
+					<h2>MaxPoint คงเหลือ : <span>0</span> MP</h2>         
+						<h3>โอนให้เพื่อน</h3>
+                        <p>
+							<img src="http://www.vdomax.com/content/themes/vdomax/images/misc/no_avatar.png"/>
+							<img src="http://www.vdomax.com/content/themes/vdomax/images/misc/no_avatar.png"/>
+							<img src="http://www.vdomax.com/content/themes/vdomax/images/misc/no_avatar.png"/>
+							<img src="http://www.vdomax.com/content/themes/vdomax/images/misc/no_avatar.png"/>
+							<img src="http://www.vdomax.com/content/themes/vdomax/images/misc/no_avatar.png"/>
+							<img src="http://www.vdomax.com/content/themes/vdomax/images/misc/no_avatar.png"/>
+							<img src="http://www.vdomax.com/content/themes/vdomax/images/misc/no_avatar.png"/>
+							<img src="http://www.vdomax.com/content/themes/vdomax/images/misc/no_avatar.png"/>
+						
+						</p>
+						
+				    </div>
+				    <div class="content-4">
+						<h2>MaxPoint คงเหลือ : <span>0</span> MP</h2>         
+						<h3>ประวัติการเติมเงิน</h3>
+						<table>
+							<thead><tr><th>ช่องทาง</th><th>รายละเอียด</th><th>จำนวน (MP)</th><th>เวลา</th></tr></thead>
+							<tbody>
+							<tr><td><img src="images/truemoney.jpg" height="30" /></td><td>บัตรเติมเงิน</td><td>20</td><td>12:13:14 วันที่ 24/12/2556</td></tr>
+							<tr><td><img src="images/paysbuy.png" height="30" /></td><td>Counter Service</td><td>20</td><td>12:13:14 วันที่ 24/12/2556</td></tr>
+							<tr><td><img src="images/kasikornbank_logo.gif" height="30" /></td><td>Direct Debit</td><td>20</td><td>12:13:14 วันที่ 24/12/2556</td></tr>
+							</tbody>
+						</table>
+                        <h3>ประวัติการโอนเงิน</h3>
+						<table>
+							<tr><th colspan="2">โอนให้</th><th>จำนวน (MP)</th><th>เวลา</th></tr>
+							<tr><td><img src="http://www.vdomax.com/content/themes/vdomax/images/misc/no_avatar.png" width="30" /></td><td>นาย ก.</td><td>20</td><td>12:13:14 วันที่ 24/12/2556</td></tr>
+							<tr><td><img src="http://www.vdomax.com/content/themes/vdomax/images/misc/no_avatar.png" width="30" /></td><td>นาย ข.</td><td>20</td><td>12:13:14 วันที่ 24/12/2556</td></tr>
+							<tr><td><img src="http://www.vdomax.com/content/themes/vdomax/images/misc/no_avatar.png" width="30" /></td><td>นาย ค.</td><td>20</td><td>12:13:14 วันที่ 24/12/2556</td></tr>
+						</table>
+						<h3>ประวัติการถอนเงิน</h3>
+						<table>
+							<tr><th colspan="2">ธนาคาร</th><th>เลขบัญชี</th><th>จำนวน (MP)</th><th>คิดเป็นเงิน (THB)</th><th>ค่าบริการ</th><th>เวลา</th></tr>
+							<tr><td><img src="images/logo_kbank.jpg" width="30" /></td><td>กสิกรไทย</td><td>123-432-1234</td><td>2000</td><td>200</td><td>15</td><td>12:13:14 วันที่ 24/12/2556</td></tr>
+							<tr><td><img src="images/logo_bbl.png" width="30" /></td><td>กรุงเทพ</td><td>123-432-1234</td><td>3000</td><td>300</td><td>15</td><td>12:13:14 วันที่ 24/12/2556</td></tr>
+							<tr><td><img src="images/logo_scb.png" width="30" /></td><td>ไทยพานิชย์</td><td>123-432-1234</td><td>10000</td><td>1000</td><td>10</td><td>12:13:14 วันที่ 24/12/2556</td></tr>
+						</table>
+				    </div>
+					<div class="content-5">
+						<h2>MaxPoint คงเหลือ : <span>0</span> MP</h2> 
+						<h3>ใส่เลขบัญชีธนาคาร</h3>
+                        <p style="float:left;width:600px;padding:35px;">
+							<span><input type="text" id="true_pass_tmp" name="true_pass_tmp"></span>
+							<a href="#" class="btn">ใส่เลขบัญชีธนาคาร</a>
+						</p>
+						<p>หมายเหตุ: เมื่อใส่แล้ว ไม่สามารถเปลี่ยนเลขบัญชีสำหรับโอนเงินออกได้ </p>
+					</div>
+		        </div>
+			</section>
+        </div>
+    </body>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script>
+		$(function(){
+			$(".channel").click(function(){
+				$("input#tab-2").attr("checked","checked");
+			
+			})
+			
+		})
+	</script>
+</html>
