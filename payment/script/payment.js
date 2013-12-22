@@ -66,7 +66,8 @@ $('#acc_no_button').click(function(){
     return false;
 });
 
-$('.popup .close').click(function(){
+
+$(document).on('click', '.popup .close', function(e) { 
     $('.popup').css('display','none');
     $('#fade').css('display','none');
 });
@@ -389,8 +390,11 @@ function showAlert(text)
 {
     htmlcode = "";
     htmlcode = "<div class='popup'>";
-    htmlcode = "<span>"+text+"</span>";
+    htmlcode = "<p style='display:block;'>"+text+"</p>";
+    htmlcode = "<button class='close'>Close</button>"
     htmlcode = "<div>";
+
+    $('body').append(htmlcode);
 }
 
 
