@@ -385,9 +385,12 @@ function getFollowing()
 }
 
 //Create Alert Modal
-function showAlert()
+function showAlert(text)
 {
-    
+    htmlcode = "";
+    htmlcode = "<div class='popup'>";
+    htmlcode = "<span>"+text+"</span>";
+    htmlcode = "<div>";
 }
 
 
