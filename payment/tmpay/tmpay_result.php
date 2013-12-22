@@ -38,7 +38,7 @@ if($status==1)
     $amount_maxpoint = $amount * $current_rate;
     
     $sql = "UPDATE fill
-      SET amount_baht = $amount, amount_maxpoint = $amount_maxpoint, success = 1, eff_date = NOW()
+      SET amount_baht = $amount, amount_maxpoint = $amount_maxpoint, success = 1, eff_date = NOW(), processed = 1
       WHERE api = '$transaction_id'
       AND user_id = $user_id
       ";
@@ -73,8 +73,21 @@ if($status==1)
 else 
 {
    /* ไม่สามารถเติมเงินได ้ */ 
+
+   $sql = "SELECT * FROM fill
+    WHERE api = '$transaction_id'
+    AND user_id = $user_id
+    AND success = 0
+    AND processed = 0
+    ";
+// AND api = '$transaction_id'
+  $res = $db2->query($sql);
+
+  if($res->num_rows>0)
+  {
+
    $sql = "UPDATE fill
-      SET ref2 = 'FAILED STATUS=$status'
+      SET ref2 = 'FAILED STATUS=$status', processed = 1
       WHERE api = '$transaction_id'
       AND user_id = $user_id
       ";
@@ -103,6 +116,8 @@ else
       ";
 
     mail($to,$subject,$message);
+
+  }
 
    die(‘ERROR|ANY_REASONS’);
 }
