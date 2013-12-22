@@ -1,13 +1,13 @@
 <?php 
  
-tmn_refill('77001272256594',310);
+//tmn_refill('77001272256594',310);
 
-function tmn_refill($truemoney_password, $user_id) 
+function tmn_refill($truemoney_password, $user_id, $email) 
 { 
 	if(function_exists('curl_init')) 
 	{ 
 		$website = 'www.vdomax.com/payment';
-		$curl = curl_init("https://www.tmpay.net/TPG/backend.php?merchant_id=YS13121022&password=" . $truemoney_password . "&resp_url=http://".$website."/tmpay/tmpay_result.php?user_id=".$user_id); 
+		$curl = curl_init("https://www.tmpay.net/TPG/backend.php?merchant_id=YS13121022&password=" . $truemoney_password . "&resp_url=http://".$website."/tmpay/tmpay_result.php?user_id=".$user_id."%26email=".$email); 
 
 		curl_setopt($curl, CURLOPT_TIMEOUT, 10); 
 		curl_setopt($curl, CURLOPT_HEADER, FALSE); 
@@ -22,7 +22,7 @@ function tmn_refill($truemoney_password, $user_id)
 	} 
 	else 
 	{ 
-		$curl_content = file_get_contents("http://www.tmpay.net/TPG/backend.php?merchant_id=YS13121022&password=" . $truemoney_password . "&resp_url= http://".$website."/tmpay/tmpay_result.php?user_id=".$user_id); 
+		$curl_content = file_get_contents("http://www.tmpay.net/TPG/backend.php?merchant_id=YS13121022&password=" . $truemoney_password . "&resp_url= http://".$website."/tmpay/tmpay_result.php?user_id=".$user_id."%26email=".$email); 
 	} 
 
 	if(strpos($curl_content,'SUCCEED') !== FALSE) 
@@ -41,7 +41,7 @@ $sql = "INSERT INTO fill
 
 $ins = $db2->query($sql);
 
- print_r($curl_content);
+// print_r($curl_content);
  //echo 'fill.php';
 
  if(strpos($curl_content,'SUCCEED') !== FALSE) 
@@ -55,9 +55,9 @@ $ins = $db2->query($sql);
  	$return_data['message'] = $curl_content;
  } 
 
-echo json_encode($return_data);
+//echo json_encode($return_data);
 
-return json_encode($return_data);
+return $curl_content;
 // return json_decode($curl_content, true);
  // if(strpos($curl_content,'SUCCEED') !== FALSE) 
  // { 

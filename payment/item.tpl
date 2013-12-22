@@ -39,7 +39,7 @@
                 <input id="tab-1" type="radio" name="radio-set" class="tab-selector-1" checked="checked" />
                 <label for="tab-1" class="tab-label-1">หน้าแรก</label>
         
-                <input id="tab-2" id="watch_live_tab" type="radio" name="radio-set" class="tab-selector-2" />
+                <input id="tab-2" type="radio" name="radio-set" class="tab-selector-2 watch_live_tab" />
                 <label for="tab-2" class="tab-label-2">Live</label>
             
                 <div class="clear-shadow"></div>

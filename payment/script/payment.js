@@ -196,16 +196,14 @@ $(document).on('click', '#exchange_otp_verify', function(e) {
 });
 
 //Item
-$('.item_live_list .item').click(function(){
+$(document).on('click', '.item_live_list .item img', function(e) { 
     $('.item_live_list .item').removeClass('selected_item');
-    $(this).addClass('selected_item');
+    $(this).parent().addClass('selected_item');
 
 });
 
-$('#watch_live_tab').click(function(){
+$('.watch_live_tab').click(function(){
     getLiveItem();
-
-    return false;
 });
 
 $('#send_item').click(function(){
@@ -216,6 +214,19 @@ $('#send_item').click(function(){
 
     item_id = $('.item_live_list .selected_item').attr('item-id');
     item_name = $('.item_live_list .selected_item').attr('item-name');
+
+    if(quantity=="" || quantity==0)
+    {
+        showAlert('กรุณาใส่จำนวน');
+        return false;
+    }
+
+    if(item_id==undefined)
+    {
+        showAlert('กรุณาเลือกไอเทม');
+        return false;
+    }
+
 
     itemTransfer(to_uid, item_id, item_name, quantity);
 
@@ -275,14 +286,26 @@ function fill_truemoney()
     pass = $('#true_pass_tmp').val();
     $.ajax({
         type: "POST",
-        dataType: 'json',
+        //dataType: 'json',
         url: "api/center.php?action=fillpoint",
         data:  {
-            "true_pass_tmp": pass,
+            "ref1": pass,
             "channel_id":1
         },
         success : function(data){
             console.log(data);
+
+            if(data.indexOf("SUCCEED")!=-1)
+            {
+                //Pass
+                showAlert('การเติมเงินของคุณได้บันทึกในระบบเรียบร้อยแล้ว ระบบกำลังตรวจสอบ ใช้เวลาประมาณ 3-5 นาที');
+            }
+            else
+            {
+                //Fail
+                showAlert('รหัสไม่ถูกต้อง');
+            }
+           // alert(data['message']);
         }
     });
 }
@@ -446,14 +469,20 @@ function showConfirmation(text)
 
 
 //Item
-function getLiveItem(live_user_id)
+function getLiveItem()
 {
+    //TEMP
+    live_user_id = 10;
+
     //alert('getOnlineUser');
+    $(".item_live_list").html('');
     $.ajax({
         type: "POST",
         dataType: 'json',
         url: "http://www.vdomax.com/payment/api/center.php?action=getliveitem",
-
+        data:{
+            "live_user_id":live_user_id
+        },
         success : function(json){
             console.log(json);
 
@@ -464,21 +493,20 @@ function getLiveItem(live_user_id)
                 imgpath = row['imgpath'];
                 quantity = row['name']+"|จำนวนที่มี "+row['own_quantity']+" ชิ้น";
 
-                htmlcode += "<li class='item'>";
-                htmlcode += 
+                htmlcode += '<li class="item" item-own="'+row['own_quantity']+'" item-name="'+row['name']+'" item-id="'+row['id']+'" >';
+                htmlcode += '<img title="'+quantity+'" alt="'+quantity+'" src="'+imgpath+'"/>';
                 htmlcode += "</li>";
-               
-                htmlcode += '<img alt="'+quantity+'" item-name="'+row['name']+'" item-id="'+row['id']+'" src="'+imgpath+'"/>';
+
+                $(".item_live_list").append(htmlcode);
+                $("#send_item_quantity").val('0');
             });
-
-            $(".item_live_list").html(htmlcode);
-
         }
     });
 }
 
-function itemTransfer(to_uid,item_id,item_name,quantity)
+function itemTransfer(to_uid,item_id,item_name,quantity, own)
 {
+    //alert(item_id+" "+quantity);
     $.ajax({
         type: "POST",
         dataType: 'json',
@@ -493,22 +521,36 @@ function itemTransfer(to_uid,item_id,item_name,quantity)
 
             if(json['status']==2)
             {
+                text = "ไอเทมที่มีไม่พอสำหรับการส่ง";
+                showAlert(text);
+                return;
+
                 //ไอเทมไม่พอ / ไม่มี จะเด้งว่าต้องการจะซื้อเป็นจำนวนเท่านี้เลยหรือไม่
-                text = "ไอเทมที่คุณมีไม่เพียงพอต่อการส่ง คุณต้องการซื้อ "+item_name+" เป็นจำนวน "+quantity+" ชิ้น หรือไม่?";
+                quantity_left = json['quantity_left'];
+                price = json['price'];
+                total_used = price*quantity_left;
+
+                text = "ไอเทมที่คุณมีไม่เพียงพอต่อการส่ง คุณต้องการซื้อ ["+item_name+"] เพิ่มเป็นจำนวน "+quantity_left+" ชิ้น เป็นเงิน "+total_used+" MP ("+price+"MP/ชิ้น) หรือไม่?";
                 showConfirmation(text);
+                
 
                 $('.confirm').click(function(){
-                    buyItem(item_id, quantity);
+                    buyItem(item_id, quantity_left, true);
                 });
 
             }
-
+            else
+            {
+                showAlert(json['message']);
+                getLiveItem();
+            }
         }
     });
 }
 
-function buyItem(item_id, quantity)
+function buyItem(item_id, quantity, isItWillSend)
 {
+    isItWillSend = typeof isItWillSend !== 'undefined' ? isItWillSend : false;
     $.ajax({
         type: "POST",
         dataType: 'json',
@@ -519,7 +561,23 @@ function buyItem(item_id, quantity)
         },
         success : function(json){
             console.log(json);
+            if(json['status']==1)
+            {
+                if(isItWillSend)
+                {
+                    $('#send_item').click();
+                }
+                else
+                {
+                    showAlert(json['message']);
+                }
+            }
+            else
+            {
+                showAlert(json['message']);
+            }  
 
+            reloadBalance();
         }
     });
 }

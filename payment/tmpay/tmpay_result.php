@@ -11,6 +11,7 @@ $db2 = new mysqli('localhost', 'payment', 'payment7410', 'payment');
  $status = $_GET['status']; 
 
 $user_id = $_GET['user_id'];
+$email = $_GET['email'];
 //print_r($userArray);
 //echo 'asda';
 
@@ -22,11 +23,12 @@ if($status==1)
     WHERE ref1 = '$password'
     AND api = '$transaction_id'
     AND user_id = $user_id
+    AND success = 0
     ";
 // AND api = '$transaction_id'
   $res = $db2->query($sql);
 
-  if($res)
+  if($res->num_rows>0)
   {
     //Match
 
@@ -50,6 +52,19 @@ if($status==1)
 
     $upd = $db2->query($sql);
 
+    //Email Notification
+    $to = $email;
+    $subject = "VDOMAX.COM: แจ้งผลการเติมเงินของท่าน";
+    $message = "ช่องทางการเติมเงิน: TRUEMONEY\r\n
+      สถานะการเติมเงิน: ผ่าน\r\n
+      จำนวน MAXPOINT ที่ได้รับ: $amount_maxpoint\r\n
+      \r\n
+      ------------------------------------------\r\n
+      This is automatically generated message. Do not reply.
+      ";
+
+    mail($to,$subject,$message);
+
   }
 
   die(‘SUCCEED|TOPPED_UP_THB_’ . $amount . ‘_TO_’ . $user_id); 
@@ -59,12 +74,35 @@ else
 {
    /* ไม่สามารถเติมเงินได ้ */ 
    $sql = "UPDATE fill
-      SET ref3 = 'FAILED STATUS=$status'
+      SET ref2 = 'FAILED STATUS=$status'
       WHERE api = '$transaction_id'
       AND user_id = $user_id
       ";
 
     $upd = $db2->query($sql) or die("ERROR: ".$sql);
+
+
+    //Email Notification
+    $to = $email;
+    $subject = "VDOMAX.COM: แจ้งผลการเติมเงินของท่าน";
+    if($status==3)
+    {
+      $status_message = "บัตรเงินสดถูกใช้ไปแล้ว";
+    }
+    elseif($status==5)
+    {
+      $status_message = "เป็นบัตรทรูมูฟ(ไม่ใช่บัตรทรูมันนี่)";
+    }
+
+    $message = "ช่องทางการเติมเงิน: TRUEMONEY\r\n
+      สถานะการเติมเงิน: ไม่ผ่าน, $status_message\r\n
+
+      \r\n
+      ------------------------------------------\r\n
+      This is automatically generated message. Do not reply.
+      ";
+
+    mail($to,$subject,$message);
 
    die(‘ERROR|ANY_REASONS’);
 }

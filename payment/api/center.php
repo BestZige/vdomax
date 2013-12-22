@@ -23,6 +23,11 @@ if($user_id=='')
 {
 	$user_id = $userArray['UserID'];
 }
+$user_email = $_REQUEST['user_email'];
+if($user_email=='')
+{
+	$user_email = $userArray['UserEmail'];
+}
 
 switch($action)
 {
@@ -36,8 +41,10 @@ switch($action)
 
 	case "fillpoint":
 		$channel_id = $_POST['channel_id'];
-		$ref1 = $_POST['true_pass_tmp'];
-		echo fillPoint($user_id, $userArray['UserToken'], $channel_id, 1, $ref1);
+		$ref1 = $_POST['ref1'];
+		$ref2 = $_POST['ref2'];
+		$ref3 = $_POST['ref3'];
+		echo fillPoint($user_id, $userArray['UserToken'], $user_email, $channel_id, 1, $ref1,$ref2,$ref3);
 	break;
 
 	case "maxpointtransfer":
@@ -76,17 +83,17 @@ switch($action)
 
 	case "useitem":
 		$from_uid   = $user_id;
-		$to_uid     = $_REQUEST['to_uid'];
-		$item_id    = $_REQUEST['item_id'];
-		$quantity   = $_REQUEST['quantity'];
+		$to_uid     = $_POST['to_uid'];
+		$item_id    = $_POST['item_id'];
+		$quantity   = $_POST['quantity'];
 		echo itemtransfer($from_uid,$userArray['UserToken'], $to_uid, $item_id, $quantity);
 	break;
 
 	case "buyitem":
 		$from_uid   = 0; //MARKET USER_ID
 		$to_uid     = $user_id;
-		$item_id    = $_REQUEST['item_id'];
-		$quantity   = $_REQUEST['quantity'];
+		$item_id    = $_POST['item_id'];
+		$quantity   = $_POST['quantity'];
 		echo itemtransfer($from_uid,$userArray['UserToken'], $to_uid, $item_id, $quantity);
 	break;
 
@@ -98,7 +105,7 @@ switch($action)
 		$live_user_id = $_POST['live_user_id'];
 
 		$watch_user_id = $user_id;
-		
+
 		echo getLiveItem($live_user_id,$watch_user_id);
 	break;
 	default:
@@ -205,7 +212,7 @@ function getBalance($user_id)
 }
 
 // Fill
-function fillPoint($user_id, $token, $channel_id, $current_rate=1, $ref1='', $ref2='', $ref3='')
+function fillPoint($user_id, $token, $user_email, $channel_id, $current_rate=1, $ref1='', $ref2='', $ref3='')
 {
 	//Check Token (FROM UID)
 	$status = CHECK_USER_TOKEN($user_id, $token);
@@ -221,9 +228,21 @@ function fillPoint($user_id, $token, $channel_id, $current_rate=1, $ref1='', $re
 			
 
 
-			$tm_result = tmn_refill($ref1, $user_id);
+			$tm_result = tmn_refill($ref1, $user_id, $user_email);
 
+			// if(strpos($tm_result,'SUCCEED') !== FALSE)
+			// {
+			// 	$return_data['status'] = 1;
+			// 	$return_data['message'] = 'การเติมเงินของคุณได้บันทึกในระบบเรียบร้อยแล้ว โปรดรอสักครู่ ระบบกำลังตรวจสอบ';
+			// }
+			// else
+			// {
+			// 	$return_data['status'] = 0;
+			// 	$return_data['message'] = 'รหัสไม่ถูกต้อง';
+			// }
+			
 
+			return;
 
 			//Fill Success
 			$return_data = array();
@@ -295,7 +314,7 @@ function pointtransfer($from_uid, $to_uid, $amount, $token)
 
 	if($to_uid=='' || $from_uid=='')
 	{
-		$return_data['status'] = 1;
+		$return_data['status'] = 0;
 		$return_data['message'] = "กรุณาเลือกคนที่ต้องการโอน Max Point ไปให้";
 		return json_encode($return_data);
 	}
@@ -314,6 +333,22 @@ function pointtransfer($from_uid, $to_uid, $amount, $token)
 		$res = $res->fetch_array(MYSQLI_ASSOC);
 
 		$current_amount = $res['current_amount'];
+
+		//Check if the destination (to_uid) has an account
+		$sql = "SELECT id
+			FROM maxpoint_account
+			WHERE user_id = $to_uid";
+
+		$res = $db2->query($sql);
+
+		if($res->num_rows<=0)
+		{
+			$return_data['status'] = 0;
+			$return_data['message'] = "UserID[$to_uid] ยังไม่มี/ไม่ได้ยืนยันบัญชี Maxpoint";
+
+			return json_encode($return_data);
+
+		}
 
 	if($current_amount - $amount >= 0)
 	{
@@ -452,7 +487,7 @@ function getQuantityOfItem($user_id, $item_id)
 		WHERE item_id = $item_id AND user_id = $user_id
 		";
 
-	$res = $db2->query($sql)
+	$res = $db2->query($sql);
 
 	if($res->num_rows<=0)
 	{
@@ -478,7 +513,7 @@ function itemtransfer($from_uid,$token, $to_uid, $item_id, $quantity)
 
 	$return_data = array();
 
-	if($to_uid=='' || $from_uid=='')
+	if($to_uid==='' || $from_uid==='')
 	{
 		$return_data['status'] = 1;
 		$return_data['message'] = "Parameter ไม่ครบ";
@@ -488,10 +523,25 @@ function itemtransfer($from_uid,$token, $to_uid, $item_id, $quantity)
 	//CHECK USER TOKEN
 	if(CHECK_USER_TOKEN($from_uid,$token))
 	{
-		//Get 
+		//Get Infomation of Item
+		$sql =  
+			"SELECT name, price, total
+			FROM item
+			WHERE id = $item_id
+			";
+
+		$res = $db2->query($sql) or die('Error: '.$sql);
+
+		$res = $res->fetch_array(MYSQLI_ASSOC);
+
+		$price  = $res['price'];
+		$item_name = $res['name'];
+
+		$total_maxpoint_used = $price * $quantity;
+
 		//Check If the user own enough item quantity
-		$sql = "SELECT quantity 
-			FROM item_own
+		$sql = "SELECT quantity
+			FROM item_own 
 			WHERE user_id = $from_uid
 			AND item_id = $item_id
 			";
@@ -501,8 +551,18 @@ function itemtransfer($from_uid,$token, $to_uid, $item_id, $quantity)
 		if($res->num_rows<=0)
 		{
 			//Don't have this Item [Item_ID]
+			if($from_uid!==0)
+			{
+				$return_data['message'] = "คุณมีไอเทมไม่พอในการส่ง";
+			}
+			else
+			{
+				$return_data['message'] = "ไอเทมหมด";
+			}
+
 			$return_data['status'] = 2;
-			$return_data['message'] = "คุณมีไอเทมไม่พอในการส่ง";
+			$return_data['quantity_left'] = $quantity;
+			$return_data['price'] = $price;
 		}
 		else
 		{
@@ -512,8 +572,20 @@ function itemtransfer($from_uid,$token, $to_uid, $item_id, $quantity)
 			if($current_quantity - $quantity < 0)
 			{
 				//จำนวน item ไม่เพียงพอสำหรับการส่ง
-				$return_data['status'] = 2;
-				$return_data['message'] = "คุณมีไอเทมไม่พอในการส่ง";
+				if($from_uid!==0)
+				{
+					$return_data['status'] = 2;
+					$return_data['message'] = "คุณมีไอเทมไม่พอในการส่ง";
+					$return_data['quantity_left'] = $quantity - $current_quantity;
+					$return_data['price'] = $price;
+				}
+				else
+				{
+					$return_data['status'] = 2;
+					$return_data['message'] = "ไอเทมหมด";
+					$return_data['quantity_left'] = $quantity;
+					$return_data['price'] = $price;
+				}
 			}
 			else
 			{
@@ -530,22 +602,6 @@ function itemtransfer($from_uid,$token, $to_uid, $item_id, $quantity)
 					$already_own = 1;
 				else
 					$already_own = 0;
-
-				//Get Infomation of Item
-				$sql =  
-					"SELECT name, price, total
-					FROM item
-					WHERE id = $item_id
-					";
-
-				$res = $db2->query($sql) or die('Error: '.$sql);
-
-				$res = $res->fetch_array(MYSQLI_ASSOC);
-
-				$price  = $res['price'];
-				$item_name = $res['item_name'];
-
-				$total_maxpoint_used = $price * $quantity;
 
 				//Get Account infomation of $to_uid
 
@@ -899,6 +955,7 @@ function getTransactionHistory($user_id)
 		INNER JOIN fill_channel fc
 			ON f.channel_id = fc.id
 		WHERE user_id = $user_id
+		AND success = 1
 		";
 
 	$fill = $db2->query($sql);

@@ -393,8 +393,6 @@ div.popup
 	padding:2px;
 	background:white;
 	margin:0px;
-	line-height: 28px;
-	height: 28px;
 }
 
 .item_live_list li.item
@@ -404,11 +402,12 @@ div.popup
 
 .item_live_list img
 {
-	width:28px;
-	height: 28px;
+	width:40px;
+	height: 40px;
 }
 
 .item_live_list li.selected_item
 {
 	background-color:#3b5998;
+	border-bottom: 5px solid orange;
 }
